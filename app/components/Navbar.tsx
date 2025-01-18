@@ -43,11 +43,6 @@ export default function Navbar() {
 
             {/* Search Bar Component */}
             <SearchBar />
-
-            {/* Subscribe Button */}
-            <button className="bg-cherry-500 text-white px-4 py-2 rounded-full hover:bg-cherry-600">
-              Subscribe
-            </button>
           </div>
         </div>
       </div>
@@ -78,11 +73,6 @@ export default function Navbar() {
           </Link>
           <div className="px-3 py-2">
             <SearchBar />
-          </div>
-          <div className="px-3 py-2">
-            <button className="w-full bg-cherry-500 text-white px-4 py-2 rounded-full hover:bg-cherry-600">
-              Subscribe
-            </button>
           </div>
         </div>
       </div>
