@@ -1,4 +1,4 @@
-collections:
+
   news:
     label: News Articles
     path: app/content/news
