@@ -29,17 +29,11 @@ export async function generateStaticParams() {
   }));
 }
 
-interface PageProps {
-  params: {
-    category: string;
-    slug: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
-
-export async function generateMetadata(
-  { params }: PageProps
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { category: string; slug: string }
+}): Promise<Metadata> {
   const post = await getPostContent(params.category, params.slug);
   
   if (!post) {
@@ -71,7 +65,11 @@ export async function generateMetadata(
   };
 }
 
-const PostPage = async ({ params }: PageProps) => {
+const PostPage = async ({
+  params,
+}: {
+  params: { category: string; slug: string }
+}) => {
   const post = await getPostContent(params.category, params.slug);
 
   if (!post) {
