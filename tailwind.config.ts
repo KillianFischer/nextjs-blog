@@ -22,7 +22,7 @@ const config = {
           900: '#7c0d26',
         }
       },
-      typography: (theme: any) => ({
+      typography: (theme: (path: string) => string) => ({
         invert: {
           css: {
             '--tw-prose-body': theme('colors.gray[300]'),
@@ -46,8 +46,8 @@ const config = {
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/forms'),
+    (await import('@tailwindcss/typography')).default,
+    (await import('@tailwindcss/forms')).default,
   ],
 } satisfies Config;
 

@@ -3,12 +3,10 @@ import { notFound } from 'next/navigation';
 import { promises as fs } from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { MDXRemote } from 'next-mdx-remote/rsc';
+import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
-import ShareButtons from '@/app/components/ShareButtons';
-import { Metadata } from 'next';
 
 async function getPostContent(category: string, slug: string) {
   try {
@@ -23,19 +21,20 @@ async function getPostContent(category: string, slug: string) {
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
-  return posts.map((post) => ({
-    category: post.slug.split('/')[0],
-    slug: post.slug.split('/')[1],
-  }));
+
+  return posts.map((post) => {
+    const [category, slug] = post.slug.split('/');
+    return { category, slug };
+  });
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: { category: string; slug: string }
+  params: { category: string; slug: string };
 }): Promise<Metadata> {
   const post = await getPostContent(params.category, params.slug);
-  
+
   if (!post) {
     return {
       title: 'Not Found',
@@ -68,7 +67,7 @@ export async function generateMetadata({
 const PostPage = async ({
   params,
 }: {
-  params: { category: string; slug: string }
+  params: { category: string; slug: string };
 }) => {
   const post = await getPostContent(params.category, params.slug);
 
@@ -93,22 +92,15 @@ const PostPage = async ({
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 -mt-32 relative z-10">
-        {/* Back Button */}
-        <Link 
-          href={`/${params.category}`}
-          className="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors"
-        >
+        <Link href={`/${params.category}`} className="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to {params.category}
         </Link>
 
-        {/* Article Header */}
         <div className="mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
             {post.metadata.title}
           </h1>
-          
-          {/* Meta Info */}
           <div className="flex flex-wrap items-center gap-4 text-gray-400">
             <div className="flex items-center">
               <Calendar className="w-4 h-4 mr-2" />
@@ -130,40 +122,15 @@ const PostPage = async ({
                 {post.metadata.readTime}
               </div>
             )}
-            <span className="bg-cherry-500 text-white px-3 py-1 rounded-full text-sm">
-              {post.metadata.category}
-            </span>
           </div>
         </div>
 
-        {/* Article Content */}
         <div className="prose prose-invert prose-cherry max-w-none">
-          <MDXRemote source={post.content} />
-        </div>
-
-        {/* Share and Tags Section */}
-        <div className="mt-12 pt-6 border-t border-zinc-800">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex gap-2">
-              {post.metadata.tags?.map((tag: string) => (
-                <span 
-                  key={tag}
-                  className="bg-zinc-800 text-gray-300 px-3 py-1 rounded-full text-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <ShareButtons 
-              url={currentUrl}
-              title={post.metadata.title}
-              image={post.metadata.image}
-            />
-          </div>
+          {/* Render MDX Content */}
         </div>
       </div>
     </article>
   );
-}
+};
 
 export default PostPage;
