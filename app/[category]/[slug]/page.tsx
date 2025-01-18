@@ -16,7 +16,7 @@ async function getPostContent(category: string, slug: string) {
     const fileContent = await fs.readFile(filePath, 'utf8');
     const { content, data } = matter(fileContent);
     return { content, metadata: data };
-  } catch (error) {
+  } catch {
     return null;
   }
 }

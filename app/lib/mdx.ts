@@ -2,54 +2,56 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
-export type PostMetadata = {
-  title: string;
-  excerpt: string;
-  date: string;
-  category: string;
-  author: string;
-  image: string;
+type Post = {
   slug: string;
+  title: string;
+  date: string;
+  author: string;
+  category: string;
+  excerpt: string;
+  image: string;
+  tags?: string[];
+  rating?: number;
+  difficulty?: string;
+  timeToComplete?: string;
 };
 
-let postsCache: PostMetadata[] | null = null;
-
-export async function getAllPosts(): Promise<PostMetadata[]> {
-  if (postsCache) {
-    return postsCache;
-  }
-
+export async function getAllPosts(): Promise<Post[]> {
+  const contentDir = path.join(process.cwd(), 'app/content');
   const categories = ['news', 'reviews', 'tutorials'];
-  let posts: PostMetadata[] = [];
+  const posts: Post[] = [];
 
-  for (const category of categories) {
-    const categoryPath = path.join(process.cwd(), 'app/content', category);
-    
-    try {
-      const files = await fs.readdir(categoryPath);
-      
-      for (const file of files) {
-        if (file.endsWith('.mdx')) {
-          const filePath = path.join(categoryPath, file);
-          const fileContent = await fs.readFile(filePath, 'utf8');
-          const { data } = matter(fileContent);
-          posts.push({
-            ...data,
-            slug: `${category}/${file.replace('.mdx', '')}`,
-          } as PostMetadata);
+  try {
+    for (const category of categories) {
+      const categoryPath = path.join(contentDir, category);
+      try {
+        const files = await fs.readdir(categoryPath);
+        
+        for (const file of files) {
+          if (file.endsWith('.mdx')) {
+            const filePath = path.join(categoryPath, file);
+            const fileContent = await fs.readFile(filePath, 'utf8');
+            const { data } = matter(fileContent);
+            
+            posts.push({
+              ...data,
+              slug: `${category}/${file.replace('.mdx', '')}`,
+            } as Post);
+          }
         }
+      } catch {
+        // Skip if category directory doesn't exist
+        continue;
       }
-    } catch (error) {
-      // Skip if directory doesn't exist
-      console.log(`Directory ${category} not found`);
     }
+    
+    return posts;
+  } catch {
+    return [];
   }
-
-  postsCache = posts;
-  return posts;
 }
 
-export async function searchPosts(query: string): Promise<PostMetadata[]> {
+export async function searchPosts(query: string): Promise<Post[]> {
   const allPosts = await getAllPosts();
   const searchQuery = query.toLowerCase();
 
