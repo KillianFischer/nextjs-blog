@@ -30,8 +30,11 @@ export async function generateStaticParams() {
 }
 
 type Props = {
-  params: { category: string; slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: {
+    category: string;
+    slug: string;
+  };
+  searchParams?: { [key: string]: string | string[] | undefined };
 };
 
 export async function generateMetadata(
