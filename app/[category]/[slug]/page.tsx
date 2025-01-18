@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function PostPage({ params, searchParams }: Props) {
+export default async function PostPage({ params }: { params: { category: string; slug: string } }) {
   const post = await getPostContent(params.category, params.slug);
 
   if (!post) {
