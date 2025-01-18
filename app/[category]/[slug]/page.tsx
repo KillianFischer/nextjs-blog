@@ -29,11 +29,14 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
+type GenerateMetadataProps = {
   params: { category: string; slug: string };
-}): Promise<Metadata> {
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata(
+  { params }: GenerateMetadataProps
+): Promise<Metadata> {
   const post = await getPostContent(params.category, params.slug);
   
   if (!post) {
@@ -65,11 +68,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function PostPage({
-  params,
-}: {
+type PageProps = {
   params: { category: string; slug: string };
-}) {
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+const PostPage = async ({ params }: PageProps) => {
   const post = await getPostContent(params.category, params.slug);
 
   if (!post) {
@@ -164,4 +168,6 @@ export default async function PostPage({
       </div>
     </article>
   );
-} 
+}
+
+export default PostPage; 
