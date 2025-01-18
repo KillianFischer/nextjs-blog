@@ -106,7 +106,3 @@ fields:
   timeToComplete:
     label: Time to Complete
     type: string
-
-media:
-  path: public/images
-  public_path: /images
