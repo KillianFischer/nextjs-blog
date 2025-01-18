@@ -29,15 +29,16 @@ export async function generateStaticParams() {
   }));
 }
 
-type GenerateMetadataProps = {
-  params: { category: string; slug: string };
+type Props = {
+  params: Promise<{ category: string; slug: string }>;
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export async function generateMetadata(
-  { params }: GenerateMetadataProps
+  { params }: Props
 ): Promise<Metadata> {
-  const post = await getPostContent(params.category, params.slug);
+  const resolvedParams = await params;
+  const post = await getPostContent(resolvedParams.category, resolvedParams.slug);
   
   if (!post) {
     return {
@@ -46,7 +47,7 @@ export async function generateMetadata(
     };
   }
 
-  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${params.category}/${params.slug}`;
+  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${resolvedParams.category}/${resolvedParams.slug}`;
 
   return {
     title: post.metadata.title,
@@ -68,19 +69,15 @@ export async function generateMetadata(
   };
 }
 
-type PageProps = {
-  params: { category: string; slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-const PostPage = async ({ params }: PageProps) => {
-  const post = await getPostContent(params.category, params.slug);
+const PostPage = async ({ params }: Props) => {
+  const resolvedParams = await params;
+  const post = await getPostContent(resolvedParams.category, resolvedParams.slug);
 
   if (!post) {
     notFound();
   }
 
-  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${params.category}/${params.slug}`;
+  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${resolvedParams.category}/${resolvedParams.slug}`;
 
   return (
     <article className="min-h-screen bg-zinc-900">
@@ -99,11 +96,11 @@ const PostPage = async ({ params }: PageProps) => {
       <div className="max-w-4xl mx-auto px-4 -mt-32 relative z-10">
         {/* Back Button */}
         <Link 
-          href={`/${params.category}`}
+          href={`/${resolvedParams.category}`}
           className="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to {params.category}
+          Back to {resolvedParams.category}
         </Link>
 
         {/* Article Header */}
