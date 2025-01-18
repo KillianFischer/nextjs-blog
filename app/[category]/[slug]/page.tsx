@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 
+// Utility to get post content
 async function getPostContent(category: string, slug: string) {
   try {
     const filePath = path.join(process.cwd(), 'app/content', category, `${slug}.mdx`);
@@ -19,6 +20,7 @@ async function getPostContent(category: string, slug: string) {
   }
 }
 
+// Static paths generator
 export async function generateStaticParams() {
   const posts = await getAllPosts();
 
@@ -28,6 +30,7 @@ export async function generateStaticParams() {
   });
 }
 
+// Metadata generation
 export async function generateMetadata({
   params,
 }: {
@@ -64,11 +67,16 @@ export async function generateMetadata({
   };
 }
 
-const PostPage = async ({
-  params,
-}: {
-  params: { category: string; slug: string };
-}) => {
+// PostPage Component Props Type
+interface PostPageProps {
+  params: {
+    category: string;
+    slug: string;
+  };
+}
+
+// PostPage Component
+const PostPage = async ({ params }: PostPageProps) => {
   const post = await getPostContent(params.category, params.slug);
 
   if (!post) {
@@ -90,7 +98,10 @@ const PostPage = async ({
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 -mt-32 relative z-10">
-        <Link href={`/${params.category}`} className="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors">
+        <Link
+          href={`/${params.category}`}
+          className="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors"
+        >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to {params.category}
         </Link>
