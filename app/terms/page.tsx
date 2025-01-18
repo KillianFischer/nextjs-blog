@@ -13,7 +13,7 @@ export default function TermsPage() {
 
         <h2>2. Use License</h2>
         <p>
-          Permission is granted to temporarily access the materials on CherryNews's website 
+          Permission is granted to temporarily access the materials on CherryNews&apos;s website 
           for personal, non-commercial viewing only.
         </p>
 
