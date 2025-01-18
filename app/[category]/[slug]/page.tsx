@@ -34,9 +34,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { category: string; slug: string };
+  params: Promise<{ category: string; slug: string }>;
 }): Promise<Metadata> {
-  const post = await getPostContent(params.category, params.slug);
+  const { category, slug } = await params;
+  const post = await getPostContent(category, slug);
 
   if (!post) {
     return {
@@ -45,7 +46,7 @@ export async function generateMetadata({
     };
   }
 
-  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${params.category}/${params.slug}`;
+  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${category}/${slug}`;
 
   return {
     title: post.metadata.title,
@@ -67,17 +68,14 @@ export async function generateMetadata({
   };
 }
 
-// PostPage Component Props Type
-interface PostPageProps {
-  params: {
-    category: string;
-    slug: string;
-  };
-}
-
 // PostPage Component
-const PostPage = async ({ params }: PostPageProps) => {
-  const post = await getPostContent(params.category, params.slug);
+const PostPage = async ({
+  params,
+}: {
+  params: Promise<{ category: string; slug: string }>;
+}) => {
+  const { category, slug } = await params;
+  const post = await getPostContent(category, slug);
 
   if (!post) {
     notFound();
@@ -99,11 +97,11 @@ const PostPage = async ({ params }: PostPageProps) => {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 -mt-32 relative z-10">
         <Link
-          href={`/${params.category}`}
+          href={`/${category}`}
           className="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to {params.category}
+          Back to {category}
         </Link>
 
         <div className="mb-8">
