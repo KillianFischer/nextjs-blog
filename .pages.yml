@@ -1,0 +1,109 @@
+
+  news:
+    label: News Articles
+    path: app/content/news
+    extension: mdx
+    format: frontmatter
+    schema:
+      title: string
+      excerpt: string
+      date: date
+      category: string
+      author: string
+      image: string
+      tags:
+        type: array
+        of: string
+        optional: true
+
+  reviews:
+    label: Game Reviews
+    path: app/content/reviews
+    extension: mdx
+    format: frontmatter
+    schema:
+      title: string
+      excerpt: string
+      date: date
+      category: string
+      author: string
+      image: string
+      rating: number
+      pros:
+        type: array
+        of: string
+      cons:
+        type: array
+        of: string
+
+  tutorials:
+    label: Tutorials
+    path: app/content/tutorials
+    extension: mdx
+    format: frontmatter
+    schema:
+      title: string
+      excerpt: string
+      date: date
+      category: string
+      author: string
+      image: string
+      difficulty: string
+      timeToComplete: string
+
+fields:
+  title:
+    label: Title
+    type: string
+    required: true
+  
+  excerpt:
+    label: Excerpt
+    type: text
+    required: true
+  
+  date:
+    label: Publication Date
+    type: date
+    required: true
+  
+  category:
+    label: Category
+    type: select
+    options:
+      - Gaming
+      - Esports
+      - Reviews
+      - Industry
+      - Tech
+    required: true
+  
+  author:
+    label: Author
+    type: string
+    required: true
+  
+  image:
+    label: Featured Image
+    type: image
+    required: true
+  
+  rating:
+    label: Rating
+    type: number
+    min: 0
+    max: 10
+    step: 0.1
+  
+  difficulty:
+    label: Difficulty Level
+    type: select
+    options:
+      - Beginner
+      - Intermediate
+      - Advanced
+  
+  timeToComplete:
+    label: Time to Complete
+    type: string
+
