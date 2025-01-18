@@ -10,14 +10,6 @@ import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import ShareButtons from '@/app/components/ShareButtons';
 import { Metadata } from 'next';
 
-type Props = {
-  params: {
-    category: string;
-    slug: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
 async function getPostContent(category: string, slug: string) {
   try {
     const filePath = path.join(process.cwd(), 'app/content', category, `${slug}.mdx`);
@@ -37,7 +29,11 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { category: string; slug: string };
+}): Promise<Metadata> {
   const post = await getPostContent(params.category, params.slug);
   
   if (!post) {
@@ -69,7 +65,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function PostPage({ params }: Props) {
+export default async function PostPage({
+  params,
+}: {
+  params: { category: string; slug: string };
+}) {
   const post = await getPostContent(params.category, params.slug);
 
   if (!post) {
