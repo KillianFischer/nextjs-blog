@@ -15,7 +15,6 @@ type Props = {
     category: string;
     slug: string;
   };
-  searchParams: Record<string, string | string[] | undefined>;
 };
 
 async function getPostContent(category: string, slug: string) {
@@ -69,7 +68,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function PostPage({ params }: { params: { category: string; slug: string } }) {
+export default async function PostPage({
+  params,
+}: {
+  params: { category: string; slug: string };
+}) {
   const post = await getPostContent(params.category, params.slug);
 
   if (!post) {
