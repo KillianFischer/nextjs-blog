@@ -30,15 +30,14 @@ export async function generateStaticParams() {
 }
 
 type Props = {
-  params: Promise<{ category: string; slug: string }>;
+  params: { category: string; slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export async function generateMetadata(
   { params }: Props
 ): Promise<Metadata> {
-  const resolvedParams = await params;
-  const post = await getPostContent(resolvedParams.category, resolvedParams.slug);
+  const post = await getPostContent(params.category, params.slug);
   
   if (!post) {
     return {
@@ -47,7 +46,7 @@ export async function generateMetadata(
     };
   }
 
-  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${resolvedParams.category}/${resolvedParams.slug}`;
+  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${params.category}/${params.slug}`;
 
   return {
     title: post.metadata.title,
@@ -70,14 +69,13 @@ export async function generateMetadata(
 }
 
 const PostPage = async ({ params }: Props) => {
-  const resolvedParams = await params;
-  const post = await getPostContent(resolvedParams.category, resolvedParams.slug);
+  const post = await getPostContent(params.category, params.slug);
 
   if (!post) {
     notFound();
   }
 
-  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${resolvedParams.category}/${resolvedParams.slug}`;
+  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${params.category}/${params.slug}`;
 
   return (
     <article className="min-h-screen bg-zinc-900">
@@ -96,11 +94,11 @@ const PostPage = async ({ params }: Props) => {
       <div className="max-w-4xl mx-auto px-4 -mt-32 relative z-10">
         {/* Back Button */}
         <Link 
-          href={`/${resolvedParams.category}`}
+          href={`/${params.category}`}
           className="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to {resolvedParams.category}
+          Back to {params.category}
         </Link>
 
         {/* Article Header */}
@@ -167,4 +165,4 @@ const PostPage = async ({ params }: Props) => {
   );
 }
 
-export default PostPage; 
+export default PostPage;
