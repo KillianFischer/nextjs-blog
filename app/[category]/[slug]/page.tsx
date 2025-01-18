@@ -10,6 +10,13 @@ import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import ShareButtons from '@/app/components/ShareButtons';
 import { Metadata } from 'next';
 
+type Props = {
+  params: {
+    category: string;
+    slug: string;
+  };
+};
+
 async function getPostContent(category: string, slug: string) {
   try {
     const filePath = path.join(process.cwd(), 'app/content', category, `${slug}.mdx`);
@@ -29,7 +36,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: { params: { category: string; slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostContent(params.category, params.slug);
   
   if (!post) {
@@ -58,21 +65,10 @@ export async function generateMetadata({ params }: { params: { category: string;
       url: currentUrl,
       type: 'article',
     },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.metadata.title,
-      description: post.metadata.excerpt,
-      images: [post.metadata.image],
-      creator: '@yourtwitterhandle', // Replace with your Twitter handle
-    },
   };
 }
 
-export default async function PostPage({
-  params,
-}: {
-  params: { category: string; slug: string };
-}) {
+export default async function PostPage({ params }: Props) {
   const post = await getPostContent(params.category, params.slug);
 
   if (!post) {

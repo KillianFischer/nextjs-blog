@@ -24,10 +24,6 @@ export const metadata: Metadata = {
     description: 'Your premier source for gaming news, reviews, and tutorials',
     siteName: 'CherryNews',
   },
-  twitter: {
-    card: 'summary_large_image',
-    site: '@Gwenfully', // Replace with your Twitter handle
-  },
 };
 
 export default function RootLayout({
