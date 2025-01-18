@@ -64,11 +64,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function PostPage({
+const PostPage = async ({
   params,
 }: {
   params: { category: string; slug: string };
-}) {
+}) => {
   const post = await getPostContent(params.category, params.slug);
 
   if (!post) {
@@ -129,4 +129,6 @@ export default async function PostPage({
       </div>
     </article>
   );
-}
+};
+
+export default PostPage;
