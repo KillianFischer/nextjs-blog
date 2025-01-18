@@ -29,16 +29,16 @@ export async function generateStaticParams() {
   }));
 }
 
-type Props = {
+interface PageProps {
   params: {
     category: string;
     slug: string;
   };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
+  searchParams: { [key: string]: string | string[] | undefined };
+}
 
 export async function generateMetadata(
-  { params }: Props
+  { params }: PageProps
 ): Promise<Metadata> {
   const post = await getPostContent(params.category, params.slug);
   
@@ -71,7 +71,7 @@ export async function generateMetadata(
   };
 }
 
-const PostPage = async ({ params }: Props) => {
+const PostPage = async ({ params }: PageProps) => {
   const post = await getPostContent(params.category, params.slug);
 
   if (!post) {
