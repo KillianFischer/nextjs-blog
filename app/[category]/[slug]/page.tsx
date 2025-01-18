@@ -64,18 +64,16 @@ export async function generateMetadata({
   };
 }
 
-const PostPage = async ({
+export default async function PostPage({
   params,
 }: {
   params: { category: string; slug: string };
-}) => {
+}) {
   const post = await getPostContent(params.category, params.slug);
 
   if (!post) {
     notFound();
   }
-
-  const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${params.category}/${params.slug}`;
 
   return (
     <article className="min-h-screen bg-zinc-900">
@@ -131,6 +129,4 @@ const PostPage = async ({
       </div>
     </article>
   );
-};
-
-export default PostPage;
+}
