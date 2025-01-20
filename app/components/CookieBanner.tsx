@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useAnalytics } from '../context/AnalyticsContext';
 
 interface CookieSettings {
   necessary: boolean;
@@ -11,6 +12,7 @@ interface CookieSettings {
 }
 
 export default function CookieBanner() {
+  const { setAnalyticsEnabled } = useAnalytics();
   const [isVisible, setIsVisible] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [cookieSettings, setCookieSettings] = useState<CookieSettings>({
@@ -36,6 +38,7 @@ export default function CookieBanner() {
       functional: true
     };
     localStorage.setItem("cookie-consent", JSON.stringify(settings));
+    setAnalyticsEnabled(true);
     setIsVisible(false);
   };
 
@@ -47,11 +50,13 @@ export default function CookieBanner() {
       functional: false
     };
     localStorage.setItem("cookie-consent", JSON.stringify(settings));
+    setAnalyticsEnabled(false);
     setIsVisible(false);
   };
 
   const handleSaveSettings = () => {
     localStorage.setItem("cookie-consent", JSON.stringify(cookieSettings));
+    setAnalyticsEnabled(cookieSettings.analytics);
     setIsVisible(false);
   };
 

@@ -4,7 +4,9 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import CookieBanner from "./components/CookieBanner";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { AnalyticsProvider } from './context/AnalyticsContext';
+import { ConditionalAnalytics } from './components/ConditionalAnalytics';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,11 +37,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
-        <Navbar />
-        {children}
-        <SpeedInsights />
-        <Footer />
-        <CookieBanner />
+        <AnalyticsProvider>
+          <Navbar />
+          {children}
+          <SpeedInsights />
+          <ConditionalAnalytics />
+          <Footer />
+          <CookieBanner />
+        </AnalyticsProvider>
       </body>
     </html>
   );
