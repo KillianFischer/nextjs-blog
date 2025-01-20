@@ -27,6 +27,9 @@ export const metadata: Metadata = {
     description: 'Your premier source for gaming news, reviews, and tutorials',
     siteName: 'CherryNews',
   },
+  other: {
+    'google-adsense-account': 'ca-pub-9320499470430652',
+  },
 };
 
 export default function RootLayout({
