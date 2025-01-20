@@ -45,8 +45,6 @@ export default async function NewsPage() {
                       year: 'numeric'
                     })}
                   </time>
-                  <span>•</span>
-                  <span>{latestArticle.author}</span>
                 </div>
               </div>
             </div>

@@ -7,6 +7,7 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
+import { compileMDX } from 'next-mdx-remote/rsc';
 
 // Utility to get post content
 async function getPostContent(category: string, slug: string) {
@@ -14,7 +15,13 @@ async function getPostContent(category: string, slug: string) {
     const filePath = path.join(process.cwd(), 'app/content', category, `${slug}.mdx`);
     const fileContent = await fs.readFile(filePath, 'utf8');
     const { content, data } = matter(fileContent);
-    return { content, metadata: data };
+    
+    const { content: compiledContent } = await compileMDX({
+      source: content,
+      options: { parseFrontmatter: false }
+    });
+
+    return { content: compiledContent, metadata: data };
   } catch {
     return null;
   }
@@ -119,10 +126,6 @@ const PostPage = async ({
                 })}
               </time>
             </div>
-            <div className="flex items-center">
-              <User className="w-4 h-4 mr-2" />
-              {post.metadata.author}
-            </div>
             {post.metadata.readTime && (
               <div className="flex items-center">
                 <Clock className="w-4 h-4 mr-2" />
@@ -133,7 +136,7 @@ const PostPage = async ({
         </div>
 
         <div className="prose prose-invert prose-cherry max-w-none">
-          {/* Render MDX Content */}
+          {post.content}
         </div>
       </div>
     </article>

@@ -9,40 +9,90 @@ export default async function Home() {
     new Date(b.date).getTime() - new Date(a.date).getTime()
   ).slice(0, 6); // Get the 6 most recent posts
 
+  // Get featured post (most recent)
+  const featuredPost = latestPosts[0];
+  const remainingPosts = latestPosts.slice(1);
+
   return (
     <div className="min-h-screen bg-zinc-900">
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 pt-16">
-        <div className="relative h-[600px] rounded-xl overflow-hidden">
-          <Image
-            src={`https://utfs.io/f/aKgRlE2AVrSoUbPVb4q3BfG4Nv5McOpHaXSg6K8zVixhFICj`}
-            alt="Featured Game"
-            fill
-            className="object-cover brightness-50"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent">
-            <div className="h-full flex items-end pb-20 px-8">
-              <div className="max-w-3xl">
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Latest Gaming News</h1>
-                <p className="text-xl text-gray-300 max-w-2xl">
-                  Experience the latest updates from the gaming world, reviews, and exclusive content.
-                </p>
-              </div>
+      <div className="relative h-[85vh] flex items-center justify-center overflow-hidden">
+        <Image
+          src={featuredPost.image}
+          alt={featuredPost.title}
+          fill
+          className="object-cover brightness-50"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/50 to-transparent">
+          <div className="max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
+            <div className="max-w-3xl">
+              <span className="inline-block bg-cherry-500 text-white px-4 py-1 rounded-full text-sm font-medium mb-4">
+                {featuredPost.category}
+              </span>
+              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+                {featuredPost.title}
+              </h1>
+              <p className="text-xl text-gray-300 mb-8 line-clamp-2">
+                {featuredPost.excerpt}
+              </p>
+              <Link 
+                href={`/${featuredPost.slug}`}
+                className="inline-flex items-center bg-white text-zinc-900 px-6 py-3 rounded-full font-medium hover:bg-cherry-500 hover:text-white transition-colors duration-200"
+              >
+                Read Article
+                <svg 
+                  className="w-4 h-4 ml-2" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M9 5l7 7-7 7" 
+                  />
+                </svg>
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
       {/* Latest Posts Grid */}
-      <main className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {latestPosts.map((post) => (
+      <main className="max-w-7xl mx-auto px-4 py-16">
+        <div className="flex items-center justify-between mb-12">
+          <h2 className="text-3xl font-bold text-white">Latest Articles</h2>
+          <Link 
+            href="/news" 
+            className="text-cherry-500 hover:text-cherry-400 font-medium flex items-center gap-1"
+          >
+            View All
+            <svg 
+              className="w-4 h-4" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M9 5l7 7-7 7" 
+              />
+            </svg>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {remainingPosts.map((post) => (
             <Link 
               key={post.slug}
               href={`/${post.slug}`}
               className="group h-full"
             >
-              <article className="bg-zinc-800 rounded-lg overflow-hidden hover:transform hover:scale-[1.02] transition-all duration-200 h-full flex flex-col">
+              <article className="bg-zinc-800/50 backdrop-blur-sm rounded-2xl overflow-hidden hover:transform hover:scale-[1.02] transition-all duration-200 h-full flex flex-col border border-zinc-700/50">
                 <div className="relative h-48 overflow-hidden">
                   <Image
                     src={post.image}
@@ -51,7 +101,7 @@ export default async function Home() {
                     className="object-cover group-hover:scale-105 transition-transform duration-200"
                   />
                   <div className="absolute top-4 left-4">
-                    <span className="bg-cherry-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+                    <span className="bg-cherry-500 text-white px-3 py-1 rounded-full text-sm font-medium">
                       {post.category}
                     </span>
                   </div>
@@ -65,8 +115,6 @@ export default async function Home() {
                         year: 'numeric'
                       })}
                     </time>
-                    <span>•</span>
-                    <span>{post.author}</span>
                   </div>
                   <h2 className="text-xl font-bold text-white mb-3 group-hover:text-cherry-500 transition-colors">
                     {post.title}
@@ -94,16 +142,6 @@ export default async function Home() {
               </article>
             </Link>
           ))}
-        </div>
-
-        {/* View All Button */}
-        <div className="flex justify-center mt-12">
-          <Link 
-            href="/news" 
-            className="bg-zinc-800 text-white px-8 py-3 rounded-full hover:bg-cherry-500 transition-colors duration-200"
-          >
-            View All Articles
-          </Link>
         </div>
       </main>
     </div>

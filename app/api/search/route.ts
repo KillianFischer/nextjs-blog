@@ -11,4 +11,4 @@ export async function GET(request: Request) {
 
   const results = await searchPosts(query);
   return NextResponse.json({ results });
-} 
+}

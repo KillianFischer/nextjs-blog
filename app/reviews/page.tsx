@@ -48,8 +48,6 @@ export default async function ReviewsPage() {
                       year: 'numeric'
                     })}
                   </time>
-                  <span>•</span>
-                  <span>{latestReview.author}</span>
                 </div>
               </div>
             </div>

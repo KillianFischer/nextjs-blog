@@ -62,44 +62,33 @@ export default function SearchBar() {
   return (
     <div className="relative" ref={searchRef}>
       <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search className={`h-5 w-5 ${isLoading ? 'text-cherry-500 animate-spin' : 'text-gray-400'}`} />
-        </div>
         <input
-          type="search"
-          placeholder="Search..."
+          type="text"
           value={query}
-          onChange={handleSearch}
-          className="w-64 bg-zinc-800 text-white pl-10 pr-4 py-2 rounded-full 
-                   border border-zinc-700 focus:outline-none focus:border-cherry-500
-                   placeholder-gray-400"
-          onFocus={() => query.length > 0 && setIsOpen(true)}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search..."
+          className="w-full bg-zinc-800 text-white placeholder-gray-400 rounded-full px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-cherry-500"
         />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
       </div>
 
       {/* Search Results Dropdown */}
-      {isOpen && (
-        <div className="absolute mt-2 w-96 bg-zinc-800 rounded-lg shadow-lg border border-zinc-700 overflow-hidden">
-          <div className="max-h-96 overflow-y-auto">
-            {results.length > 0 ? (
-              results.map((result, index) => (
-                <Link
-                  key={index}
-                  href={`/${result.slug}`}
-                  onClick={() => setIsOpen(false)}
-                  className="block px-4 py-3 hover:bg-zinc-700 transition-colors"
-                >
-                  <div className="text-white text-sm font-medium">{result.title}</div>
-                  <div className="text-gray-400 text-xs mt-1">{result.excerpt}</div>
-                  <div className="text-cherry-500 text-xs mt-1">{result.category}</div>
-                </Link>
-              ))
-            ) : (
-              <div className="px-4 py-3 text-gray-400 text-sm">
-                {isLoading ? 'Searching...' : 'No results found'}
-              </div>
-            )}
-          </div>
+      {results.length > 0 && query && (
+        <div className="absolute z-50 w-full mt-2 bg-zinc-800 rounded-lg shadow-lg border border-zinc-700 max-h-[60vh] overflow-y-auto">
+          {results.map((result) => (
+            <Link
+              key={result.slug}
+              href={`/${result.slug}`}
+              onClick={() => {
+                setQuery('');
+                setResults([]);
+              }}
+              className="block px-4 py-3 hover:bg-zinc-700 transition-colors"
+            >
+              <h3 className="text-white font-medium">{result.title}</h3>
+              <p className="text-sm text-gray-400 mt-1 line-clamp-2">{result.excerpt}</p>
+            </Link>
+          ))}
         </div>
       )}
     </div>

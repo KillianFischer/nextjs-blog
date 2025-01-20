@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /legal-notice
+Disallow: /privacy
+Disallow: /terms
+Disallow: /cookies

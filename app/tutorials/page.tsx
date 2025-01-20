@@ -51,8 +51,6 @@ export default async function TutorialsPage() {
                       year: 'numeric'
                     })}
                   </time>
-                  <span>•</span>
-                  <span>{latestTutorial.author}</span>
                 </div>
               </div>
             </div>
