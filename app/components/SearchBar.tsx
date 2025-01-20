@@ -14,15 +14,12 @@ type SearchResult = {
 export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
   // Debounced search
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (query) {
-        setIsLoading(true);
         try {
           const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
           const data = await response.json();
@@ -30,8 +27,6 @@ export default function SearchBar() {
         } catch (error) {
           console.error('Search failed:', error);
           setResults([]);
-        } finally {
-          setIsLoading(false);
         }
       } else {
         setResults([]);
@@ -45,19 +40,13 @@ export default function SearchBar() {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+        setQuery('');
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setQuery(value);
-    setIsOpen(value.length > 0);
-  };
 
   return (
     <div className="relative" ref={searchRef}>
