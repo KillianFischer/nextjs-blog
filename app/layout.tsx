@@ -6,7 +6,6 @@ import Footer from "./components/Footer";
 import CookieBanner from "./components/CookieBanner";
 import { AnalyticsProvider } from './context/AnalyticsContext';
 import { ConditionalAnalytics } from './components/ConditionalAnalytics';
-import Script from 'next/script';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,10 +36,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <Script
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9320499470430652"
-          strategy="afterInteractive"
           crossOrigin="anonymous"
         />
       </head>
@@ -49,7 +47,9 @@ export default function RootLayout({
           <header>
             <Navbar />
           </header>
-          {children}
+          <main className="pt-20">
+            {children}
+          </main>
           <ConditionalAnalytics />
           <Footer />
           <CookieBanner />
