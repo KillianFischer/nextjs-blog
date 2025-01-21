@@ -16,10 +16,10 @@ interface AdsenseProps {
   className?: string;
 }
 
-export default function Adsense({ slot, style, className }: AdsenseProps) {
+export default function Adsense({ slot = "4100849960", style, className }: AdsenseProps) {
   useEffect(() => {
     try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({ test: true });
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (err) {
       console.error(err);
     }

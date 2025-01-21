@@ -62,26 +62,19 @@ export default async function Home() {
 
       {/* Latest Posts Grid */}
       <main className="max-w-7xl mx-auto px-4 py-16">
-        {/* AdSense Component */}
+        {/* AdSense Unit */}
         <div className="w-full flex justify-center my-8">
-          <div id="homepage-top-ad" className="min-h-[100px]">
-            <script
-              async
-              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR-CLIENT-ID"
-              crossOrigin="anonymous"
-            ></script>
-            <ins
-              className="adsbygoogle"
-              style={{ display: 'block' }}
-              data-ad-client="YOUR-CLIENT-ID"
-              data-ad-slot="YOUR-AD-SLOT"
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            ></ins>
-            <script>
-              (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}"
+            crossOrigin="anonymous"></script>
+          <ins className="adsbygoogle"
+            style={{ display: 'block' }}
+            data-ad-client="{process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}"
+            data-ad-slot="4100849960"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+          <script dangerouslySetInnerHTML={{
+            __html: `(adsbygoogle = window.adsbygoogle || []).push({});`
+          }}></script>
         </div>
         
         <div className="flex items-center justify-between mb-12">
