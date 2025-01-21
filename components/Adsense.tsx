@@ -11,14 +11,22 @@ declare global {
 }
 
 interface AdsenseProps {
-  slot: string;
+  slot?: string;  // Made optional since we'll have a default ad unit
   style?: React.CSSProperties;
   className?: string;
 }
 
-export default function Adsense({ slot, style, className }: AdsenseProps) {
+export default function Adsense({ slot = "4100849960", style, className }: AdsenseProps) {
   useEffect(() => {
     try {
+      // Load AdSense script
+      const script = document.createElement('script');
+      script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9320499470430652";
+      script.crossOrigin = "anonymous";
+      script.async = true;
+      document.head.appendChild(script);
+
+      // Initialize ad
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (err) {
       console.error('Adsense error:', err);
@@ -27,9 +35,10 @@ export default function Adsense({ slot, style, className }: AdsenseProps) {
 
   return (
     <div className={`w-full flex justify-center ${className}`}>
+      {/* ad-unit-1 */}
       <ins
         className="adsbygoogle"
-        style={style || { display: 'block', minWidth: '300px', width: '100%', height: '250px' }}
+        style={style || { display: 'block', width: '100%' }}
         data-ad-client="ca-pub-9320499470430652"
         data-ad-slot={slot}
         data-ad-format="auto"

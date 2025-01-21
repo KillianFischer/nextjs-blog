@@ -65,14 +65,11 @@ export default async function Home() {
       <main className="max-w-7xl mx-auto px-4 py-16">
         {/* AdSense Unit */}
         <Adsense 
-          slot="4100849960" 
           className="my-8 min-h-[250px]" 
           style={{ 
             display: 'block',
-            minWidth: '300px',
             width: '100%',
-            height: '250px',
-            backgroundColor: '#18181b' // Optional: adds a background while loading
+            height: '250px'
           }}
         />
         
