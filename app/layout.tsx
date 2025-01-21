@@ -4,7 +4,6 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import CookieBanner from "./components/CookieBanner";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AnalyticsProvider } from './context/AnalyticsContext';
 import { ConditionalAnalytics } from './components/ConditionalAnalytics';
 import Script from 'next/script';
@@ -43,10 +42,9 @@ export default function RootLayout({
       <head>
         <Script
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9320499470430652"
           strategy="afterInteractive"
           crossOrigin="anonymous"
-          data-ad-client="ca-pub-9320499470430652"
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
@@ -55,7 +53,6 @@ export default function RootLayout({
             <Navbar />
           </header>
           {children}
-          <SpeedInsights />
           <ConditionalAnalytics />
           <Footer />
           <CookieBanner />
