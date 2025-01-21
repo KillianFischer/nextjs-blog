@@ -1,3 +1,5 @@
+'use client';
+
 // components/AdSense.js
 import { useEffect } from 'react';
 
