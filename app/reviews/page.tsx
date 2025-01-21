@@ -34,7 +34,7 @@ export default function ReviewsPage() {
           .sort((a: Review, b: Review) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
         // Extract unique platforms
-        const uniquePlatforms = ["All", ...new Set(reviewPosts.map((review: Review) => review.platform).filter(Boolean))];
+        const uniquePlatforms = ["All", ...new Set(reviewPosts.map((review: Review) => review.platform).filter(Boolean))] as string[];
         
         setReviews(reviewPosts);
         setPlatforms(uniquePlatforms);

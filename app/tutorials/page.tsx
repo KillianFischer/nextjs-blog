@@ -34,7 +34,7 @@ export default function TutorialsPage() {
           .sort((a: Tutorial, b: Tutorial) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
         // Extract unique categories
-        const uniqueCategories = ["All", ...new Set(tutorialPosts.map((tutorial: Tutorial) => tutorial.category))];
+        const uniqueCategories = ["All", ...new Set(tutorialPosts.map((tutorial: Tutorial) => tutorial.category))] as string[];
         
         setTutorials(tutorialPosts);
         setCategories(uniqueCategories);

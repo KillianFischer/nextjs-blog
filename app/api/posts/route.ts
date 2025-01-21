@@ -1,4 +1,4 @@
-import { getAllPosts } from '@/app/lib/mdx-server';
+import { getAllPosts } from '@/app/lib/mdx-server.ts';
 import { NextResponse } from 'next/server';
 
 export async function GET() {

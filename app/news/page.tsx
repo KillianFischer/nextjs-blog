@@ -32,7 +32,7 @@ export default function NewsPage() {
           .sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
         // Extract unique categories
-        const uniqueCategories = ["All", ...new Set(newsArticles.map((article: Post) => article.category))];
+        const uniqueCategories = ["All", ...new Set(newsArticles.map((article: Post) => article.category))] as string[];
         
         setArticles(newsArticles);
         setCategories(uniqueCategories);
