@@ -1,5 +1,4 @@
-'use client';
-
+// components/AdSense.js
 import { useEffect } from 'react';
 
 declare global {
@@ -10,36 +9,37 @@ declare global {
   }
 }
 
-interface AdsenseProps {
-  slot?: string;
-  style?: React.CSSProperties;
-  className?: string;
-}
+const AdSense = () => {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+    script.async = true;
+    script.setAttribute('data-ad-client', 'ca-pub-9320499470430652');
+    document.head.appendChild(script);
 
-export default function Adsense({ slot = "4100849960", style, className }: AdsenseProps) {
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
   useEffect(() => {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
-      console.error('Adsense error:', err);
+    } catch (e) {
+      console.error('AdSense error:', e);
     }
   }, []);
 
   return (
-    <div className={`w-full flex justify-center ${className}`}>
-      <ins
-        className="adsbygoogle"
-        style={style || { 
-          display: 'block',
-          minHeight: '250px',
-          width: '100%',
-          height: '250px'
-        }}
-        data-ad-client="ca-pub-9320499470430652"
-        data-ad-slot={slot}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      />
-    </div>
+    <ins
+      className="adsbygoogle"
+      style={{ display: 'block' }}
+      data-ad-client="ca-pub-9320499470430652"
+      data-ad-slot="4100849960"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
   );
-} 
+};
+
+export default AdSense;
