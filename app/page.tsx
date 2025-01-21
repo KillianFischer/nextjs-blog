@@ -64,7 +64,17 @@ export default async function Home() {
       {/* Latest Posts Grid */}
       <main className="max-w-7xl mx-auto px-4 py-16">
         {/* AdSense Unit */}
-        <Adsense slot="4100849960" className="my-8" />
+        <Adsense 
+          slot="4100849960" 
+          className="my-8 min-h-[250px]" 
+          style={{ 
+            display: 'block',
+            minWidth: '300px',
+            width: '100%',
+            height: '250px',
+            backgroundColor: '#18181b' // Optional: adds a background while loading
+          }}
+        />
         
         <div className="flex items-center justify-between mb-12">
           <h2 className="text-3xl font-bold text-white">Latest Articles</h2>

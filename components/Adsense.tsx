@@ -19,15 +19,7 @@ interface AdsenseProps {
 export default function Adsense({ slot, style, className }: AdsenseProps) {
   useEffect(() => {
     try {
-      // Load AdSense script
-      const script = document.createElement('script');
-      script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9320499470430652";
-      script.crossOrigin = "anonymous";
-      script.async = true;
-      document.head.appendChild(script);
-
-      const adsbygoogle = window.adsbygoogle || [];
-      adsbygoogle.push({});
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (err) {
       console.error('Adsense error:', err);
     }
@@ -42,7 +34,11 @@ export default function Adsense({ slot, style, className }: AdsenseProps) {
         data-ad-slot={slot}
         data-ad-format="auto"
         data-full-width-responsive="true"
-      />
+      >
+        <div className="w-full h-full bg-zinc-800 flex items-center justify-center text-gray-400">
+          Ad Space
+        </div>
+      </ins>
     </div>
   );
 } 
