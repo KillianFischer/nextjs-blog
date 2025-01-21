@@ -62,6 +62,28 @@ export default async function Home() {
 
       {/* Latest Posts Grid */}
       <main className="max-w-7xl mx-auto px-4 py-16">
+        {/* AdSense Component */}
+        <div className="w-full flex justify-center my-8">
+          <div id="homepage-top-ad" className="min-h-[100px]">
+            <script
+              async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR-CLIENT-ID"
+              crossOrigin="anonymous"
+            ></script>
+            <ins
+              className="adsbygoogle"
+              style={{ display: 'block' }}
+              data-ad-client="YOUR-CLIENT-ID"
+              data-ad-slot="YOUR-AD-SLOT"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
+            <script>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+        </div>
+        
         <div className="flex items-center justify-between mb-12">
           <h2 className="text-3xl font-bold text-white">Latest Articles</h2>
           <Link 
