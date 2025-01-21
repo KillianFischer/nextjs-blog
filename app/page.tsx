@@ -1,6 +1,7 @@
 import { getAllPosts } from '@/app/lib/mdx';
 import Image from "next/image";
 import Link from "next/link";
+import Adsense from "@/components/Adsense";
 
 export default async function Home() {
   const allPosts = await getAllPosts();
@@ -63,19 +64,7 @@ export default async function Home() {
       {/* Latest Posts Grid */}
       <main className="max-w-7xl mx-auto px-4 py-16">
         {/* AdSense Unit */}
-        <div className="w-full flex justify-center my-8">
-          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}"
-            crossOrigin="anonymous"></script>
-          <ins className="adsbygoogle"
-            style={{ display: 'block' }}
-            data-ad-client="{process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}"
-            data-ad-slot="4100849960"
-            data-ad-format="auto"
-            data-full-width-responsive="true"></ins>
-          <script dangerouslySetInnerHTML={{
-            __html: `(adsbygoogle = window.adsbygoogle || []).push({});`
-          }}></script>
-        </div>
+        <Adsense slot="4100849960" className="my-8" />
         
         <div className="flex items-center justify-between mb-12">
           <h2 className="text-3xl font-bold text-white">Latest Articles</h2>

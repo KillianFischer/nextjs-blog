@@ -16,21 +16,24 @@ interface AdsenseProps {
   className?: string;
 }
 
-export default function Adsense({ slot = "4100849960", style, className }: AdsenseProps) {
+export default function Adsense({ slot, style, className }: AdsenseProps) {
   useEffect(() => {
     try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      const adsbygoogle = window.adsbygoogle || [];
+      adsbygoogle.push({});
     } catch (err) {
-      console.error(err);
+      console.error('Adsense error:', err);
     }
   }, []);
+
+  const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
 
   return (
     <div className={`w-full flex justify-center ${className}`}>
       <ins
         className="adsbygoogle"
-        style={style || { display: 'block' }}
-        data-ad-client={process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}
+        style={style || { display: 'block', minWidth: '300px', width: '100%', height: '250px' }}
+        data-ad-client={clientId}
         data-ad-slot={slot}
         data-ad-format="auto"
         data-full-width-responsive="true"
