@@ -36,11 +36,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script 
-          async 
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}`}
-          crossOrigin="anonymous">
-        </script>
+        <script async 
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9320499470430652" 
+        crossOrigin="anonymous" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
         <AnalyticsProvider>

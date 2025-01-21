@@ -19,6 +19,13 @@ interface AdsenseProps {
 export default function Adsense({ slot, style, className }: AdsenseProps) {
   useEffect(() => {
     try {
+      // Load AdSense script
+      const script = document.createElement('script');
+      script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9320499470430652";
+      script.crossOrigin = "anonymous";
+      script.async = true;
+      document.head.appendChild(script);
+
       const adsbygoogle = window.adsbygoogle || [];
       adsbygoogle.push({});
     } catch (err) {
@@ -26,14 +33,12 @@ export default function Adsense({ slot, style, className }: AdsenseProps) {
     }
   }, []);
 
-  const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
-
   return (
     <div className={`w-full flex justify-center ${className}`}>
       <ins
         className="adsbygoogle"
         style={style || { display: 'block', minWidth: '300px', width: '100%', height: '250px' }}
-        data-ad-client={clientId}
+        data-ad-client="ca-pub-9320499470430652"
         data-ad-slot={slot}
         data-ad-format="auto"
         data-full-width-responsive="true"
