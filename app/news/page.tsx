@@ -1,20 +1,75 @@
-import { getAllPosts } from '@/app/lib/mdx';
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from 'react';
 
-const categories = ["All", "Games", "Esports", "Reviews", "Industry", "Tech"];
+type Post = {
+  slug: string;
+  title: string;
+  date: string;
+  category: string;
+  excerpt: string;
+  image: string;
+};
 
-export default async function NewsPage() {
-  const allPosts = await getAllPosts();
-  const newsArticles = allPosts.filter(post => post.slug.startsWith('news/'))
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+export default function NewsPage() {
+  const [articles, setArticles] = useState<Post[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [latestArticle, setLatestArticle] = useState<Post | null>(null);
+  const [filteredArticles, setFilteredArticles] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const latestArticle = newsArticles[0];
-  const remainingArticles = newsArticles.slice(1);
+  useEffect(() => {
+    async function fetchArticles() {
+      try {
+        const response = await fetch('/api/posts');
+        const allPosts = await response.json();
+        
+        const newsArticles = allPosts
+          .filter((post: Post) => post.slug.startsWith('news/'))
+          .sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+        // Extract unique categories
+        const uniqueCategories = ["All", ...new Set(newsArticles.map((article: Post) => article.category))];
+        
+        setArticles(newsArticles);
+        setCategories(uniqueCategories);
+        setLatestArticle(newsArticles[0]);
+        setFilteredArticles(newsArticles.slice(1));
+      } catch (error) {
+        console.error('Failed to fetch articles:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchArticles();
+  }, []);
+
+  useEffect(() => {
+    if (selectedCategory === "All") {
+      setFilteredArticles(articles.slice(1));
+    } else {
+      const filtered = articles
+        .filter(article => article.category === selectedCategory)
+        .slice(selectedCategory === articles[0]?.category ? 1 : 0);
+      setFilteredArticles(filtered);
+    }
+  }, [selectedCategory, articles]);
+
+  if (isLoading || !latestArticle) {
+    return (
+      <div className="min-h-screen bg-zinc-900 flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-zinc-900">
-      {/* Hero Section with Latest Article */}
+      {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 pt-16">
         <div className="relative h-[600px] rounded-xl overflow-hidden">
           <Image
@@ -58,11 +113,13 @@ export default async function NewsPage() {
           {categories.map((category) => (
             <button
               key={category}
-              className="px-4 py-2 rounded-full text-sm font-medium 
+              onClick={() => setSelectedCategory(category)}
+              className={`px-4 py-2 rounded-full text-sm font-medium 
                        transition-colors duration-200 ease-in-out
-                       hover:bg-cherry-500 hover:text-white
                        focus:outline-none focus:ring-2 focus:ring-cherry-500
-                       bg-zinc-800 text-gray-300"
+                       ${selectedCategory === category 
+                         ? 'bg-cherry-500 text-white' 
+                         : 'bg-zinc-800 text-gray-300 hover:bg-cherry-500 hover:text-white'}`}
             >
               {category}
             </button>
@@ -73,7 +130,7 @@ export default async function NewsPage() {
       {/* News Grid */}
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {remainingArticles.map((article) => (
+          {filteredArticles.map((article) => (
             <Link
               key={article.slug}
               href={`/${article.slug}`}
@@ -129,13 +186,6 @@ export default async function NewsPage() {
               </article>
             </Link>
           ))}
-        </div>
-
-        {/* Load More Button */}
-        <div className="flex justify-center mt-12">
-          <button className="bg-zinc-800 text-white px-8 py-3 rounded-full hover:bg-cherry-500 transition-colors duration-200">
-            Load More Articles
-          </button>
         </div>
       </main>
     </div>

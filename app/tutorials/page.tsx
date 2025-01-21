@@ -1,21 +1,77 @@
-import { getAllPosts } from '@/app/lib/mdx';
-import Image from 'next/image';
-import Link from 'next/link';
+"use client";
 
-const categories = ["All", "Gaming", "Hardware", "Streaming", "Software", "Modding"];
+import Image from "next/image";
+import Link from "next/link";
+import { useState, useEffect } from 'react';
 
-export default async function TutorialsPage() {
-  const allPosts = await getAllPosts();
-  const tutorials = allPosts
-    .filter(post => post.slug.startsWith('tutorials/'))
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+type Tutorial = {
+  slug: string;
+  title: string;
+  date: string;
+  category: string;
+  excerpt: string;
+  image: string;
+  difficulty: string;
+  timeToComplete: string;
+};
 
-  const latestTutorial = tutorials[0];
-  const remainingTutorials = tutorials.slice(1);
+export default function TutorialsPage() {
+  const [tutorials, setTutorials] = useState<Tutorial[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [latestTutorial, setLatestTutorial] = useState<Tutorial | null>(null);
+  const [filteredTutorials, setFilteredTutorials] = useState<Tutorial[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchTutorials() {
+      try {
+        const response = await fetch('/api/posts');
+        const allPosts = await response.json();
+        
+        const tutorialPosts = allPosts
+          .filter((post: Tutorial) => post.slug.startsWith('tutorials/'))
+          .sort((a: Tutorial, b: Tutorial) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+        // Extract unique categories
+        const uniqueCategories = ["All", ...new Set(tutorialPosts.map((tutorial: Tutorial) => tutorial.category))];
+        
+        setTutorials(tutorialPosts);
+        setCategories(uniqueCategories);
+        setLatestTutorial(tutorialPosts[0]);
+        setFilteredTutorials(tutorialPosts.slice(1));
+      } catch (error) {
+        console.error('Failed to fetch tutorials:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchTutorials();
+  }, []);
+
+  useEffect(() => {
+    if (selectedCategory === "All") {
+      setFilteredTutorials(tutorials.slice(1));
+    } else {
+      const filtered = tutorials
+        .filter(tutorial => tutorial.category === selectedCategory)
+        .slice(selectedCategory === tutorials[0]?.category ? 1 : 0);
+      setFilteredTutorials(filtered);
+    }
+  }, [selectedCategory, tutorials]);
+
+  if (isLoading || !latestTutorial) {
+    return (
+      <div className="min-h-screen bg-zinc-900 flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-zinc-900">
-      {/* Hero Section with Latest Tutorial */}
+      {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 pt-16">
         <div className="relative h-[600px] rounded-xl overflow-hidden">
           <Image
@@ -27,11 +83,11 @@ export default async function TutorialsPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent">
             <div className="h-full flex items-end pb-20 px-8">
               <div className="max-w-3xl">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="bg-zinc-900/90 text-white px-3 py-1 rounded-full text-sm">
+                <div className="flex gap-2 mb-4">
+                  <span className="inline-block bg-zinc-900/90 text-white px-3 py-1 rounded-full text-sm">
                     {latestTutorial.difficulty}
                   </span>
-                  <span className="bg-cherry-500 text-white px-3 py-1 rounded-full text-sm">
+                  <span className="inline-block bg-cherry-500 text-white px-3 py-1 rounded-full text-sm">
                     {latestTutorial.timeToComplete}
                   </span>
                 </div>
@@ -64,11 +120,13 @@ export default async function TutorialsPage() {
           {categories.map((category) => (
             <button
               key={category}
-              className="px-4 py-2 rounded-full text-sm font-medium 
+              onClick={() => setSelectedCategory(category)}
+              className={`px-4 py-2 rounded-full text-sm font-medium 
                        transition-colors duration-200 ease-in-out
-                       hover:bg-cherry-500 hover:text-white
                        focus:outline-none focus:ring-2 focus:ring-cherry-500
-                       bg-zinc-800 text-gray-300"
+                       ${selectedCategory === category 
+                         ? 'bg-cherry-500 text-white' 
+                         : 'bg-zinc-800 text-gray-300 hover:bg-cherry-500 hover:text-white'}`}
             >
               {category}
             </button>
@@ -79,8 +137,8 @@ export default async function TutorialsPage() {
       {/* Tutorials Grid */}
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {remainingTutorials.map((tutorial) => (
-            <Link 
+          {filteredTutorials.map((tutorial) => (
+            <Link
               key={tutorial.slug}
               href={`/${tutorial.slug}`}
               className="group h-full"
@@ -140,13 +198,6 @@ export default async function TutorialsPage() {
               </article>
             </Link>
           ))}
-        </div>
-
-        {/* Load More Button */}
-        <div className="flex justify-center mt-12">
-          <button className="bg-zinc-800 text-white px-8 py-3 rounded-full hover:bg-cherry-500 transition-colors duration-200">
-            Load More Tutorials
-          </button>
         </div>
       </main>
     </div>
